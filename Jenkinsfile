@@ -4,6 +4,7 @@ pipeline {
     environment {
         // Define the webhook URL as an environment variable
         WEBHOOK_URL = 'http://localhost:8080/jenkins/v1/webhook'
+        JENKINS_URL = 'http://localhost:8090'  // Jenkins URL for CSRF token
     }
 
     stages {
@@ -34,17 +35,27 @@ pipeline {
     }
 
     post {
-        // Trigger the webhook based on the build result
+        // Trigger CSRF token before any post actions
         always {
             script {
-                // Get the build status (SUCCESS, FAILURE, etc.)
-                def status = currentBuild.result ?: 'SUCCESS'
+                // Step 1: Get CSRF token from Jenkins
+                def crumbResponse = httpRequest(
+                    url: "${JENKINS_URL}/jenkins/crumbIssuer/api/json",
+                    httpMode: 'GET',
+                    validResponseCodes: '200'
+                )
+                def crumb = readJSON(text: crumbResponse).crumb
+                echo "CSRF Token retrieved: ${crumb}"
 
-                // Trigger the webhook
+                // Step 2: Trigger the webhook with CSRF token
+                def status = currentBuild.result ?: 'SUCCESS'
                 def response = httpRequest(
                     url: "${WEBHOOK_URL}",
                     httpMode: 'POST',
                     contentType: 'APPLICATION_JSON',
+                    customHeaders: [
+                        [name: 'Jenkins-Crumb', value: crumb]  // CSRF token header
+                    ],
                     requestBody: """
                     {
                         "status": "${status}", 
@@ -54,37 +65,10 @@ pipeline {
                     }
                     """
                 )
-
                 echo "Response from webhook: ${response}"
             }
         }
 
-        // This will trigger after a successful build
-        success {
-            script {
-                echo 'Build succeeded! Triggering webhook...'
-            }
-        }
-
-        // This will trigger if the build fails
-        failure {
-            script {
-                echo 'Build failed! Triggering webhook...'
-            }
-        }
-
-        // This will trigger when the pipeline is aborted
-        aborted {
-            script {
-                echo 'Build was aborted! Triggering webhook...'
-            }
-        }
-
-        // This will trigger if any error occurs in the pipeline
-        unstable {
-            script {
-                echo 'Build is unstable! Triggering webhook...'
-            }
-        }
+        // Additional post conditions...
     }
 }
