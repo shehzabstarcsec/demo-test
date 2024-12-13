@@ -4,7 +4,6 @@ pipeline {
     environment {
         // Define the webhook URL as an environment variable
         WEBHOOK_URL = 'http://localhost:8080/jenkins/v1/webhook'
-        JENKINS_URL = 'http://localhost:8090'  // Jenkins URL for CSRF token
     }
 
     stages {
@@ -35,27 +34,17 @@ pipeline {
     }
 
     post {
-        // Trigger CSRF token before any post actions
+        // Trigger the webhook based on the build result
         always {
             script {
-                // Step 1: Get CSRF token from Jenkins
-                def crumbResponse = httpRequest(
-                    url: "${JENKINS_URL}/jenkins/crumbIssuer/api/json",
-                    httpMode: 'GET',
-                    validResponseCodes: '200'
-                )
-                def crumb = readJSON(text: crumbResponse).crumb
-                echo "CSRF Token retrieved: ${crumb}"
-
-                // Trigger the webhook based on the build result
+                // Get the build status (SUCCESS, FAILURE, etc.)
                 def status = currentBuild.result ?: 'SUCCESS'
+
+                // Trigger the webhook
                 def response = httpRequest(
                     url: "${WEBHOOK_URL}",
                     httpMode: 'POST',
                     contentType: 'APPLICATION_JSON',
-                    customHeaders: [
-                        [name: 'Jenkins-Crumb', value: crumb]  // CSRF token header
-                    ],
                     requestBody: """
                     {
                         "status": "${status}", 
@@ -65,6 +54,7 @@ pipeline {
                     }
                     """
                 )
+
                 echo "Response from webhook: ${response}"
             }
         }
