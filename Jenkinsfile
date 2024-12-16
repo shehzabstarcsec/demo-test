@@ -47,9 +47,8 @@ pipeline {
                         [name: 'Authorization', value: 'Basic Y29kZWNyYWZ0OjExODBlOTVhMzIxNjMwODZlNzEwMGQ3MjQyY2U1NmE4NTI=']
                     ]
                 )
-                echo "Response from crumb: ${crumbResponse}"
-                // def crumb = readJSON(text: crumbResponse).crumb
-                def crumb="519f956146699c03ff4b37c8ff141315822bf2b06434696cc419a294d5bc8fff"
+                def crumb = readJSON(text: crumbResponse).crumb
+                // def crumb="519f956146699c03ff4b37c8ff141315822bf2b06434696cc419a294d5bc8fff"
                 echo "CSRF Token retrieved: ${crumb}"
 
                 // Step 2: Trigger the webhook with CSRF token
