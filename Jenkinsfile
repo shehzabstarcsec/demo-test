@@ -39,12 +39,13 @@ pipeline {
         always {
             script {
                 // Step 1: Get CSRF token from Jenkins
-                def crumbResponse = httpRequest(
-                    url: "${JENKINS_URL}/crumbIssuer/api/json",
-                    httpMode: 'GET',
-                    validResponseCodes: '200'
-                )
-                def crumb = readJSON(text: crumbResponse).crumb
+                // def crumbResponse = httpRequest(
+                //     url: "${JENKINS_URL}/crumbIssuer/api/json",
+                //     httpMode: 'GET',
+                //     validResponseCodes: '200'
+                // )
+                // def crumb = readJSON(text: crumbResponse).crumb
+                def crumb="519f956146699c03ff4b37c8ff141315822bf2b06434696cc419a294d5bc8fff"
                 echo "CSRF Token retrieved: ${crumb}"
 
                 // Step 2: Trigger the webhook with CSRF token
