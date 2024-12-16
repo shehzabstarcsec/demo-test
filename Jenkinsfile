@@ -56,6 +56,7 @@ pipeline {
                     contentType: 'APPLICATION_JSON',
                     customHeaders: [
                          [name: 'Jenkins-Crumb', value: crumb],
+                         [name: 'Origin', value: 'http://localhost:8090']
                     ],
                     requestBody: """
                         {
