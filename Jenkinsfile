@@ -64,11 +64,11 @@ pipeline {
                     ],
                     requestBody: """
                         {
-                            "status": "asds",
-                            "message": "dasfdsafd",
-                            "build_url": "fedwfewf",
-                            "commit": "qwewewqe"
-                        }
+                        "status": "${status}", 
+                        "message": "Build ${status}", 
+                        "build_url": "${BUILD_URL}", 
+                        "commit": "${GIT_COMMIT}"
+                    }
                     """
                 )
                 echo "Response from webhook: ${response}"
