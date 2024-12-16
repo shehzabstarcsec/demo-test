@@ -55,7 +55,7 @@ pipeline {
                     httpMode: 'POST',
                     contentType: 'APPLICATION_JSON',
                     customHeaders: [
-                        [name: 'Jenkins-Crumb', value: crumb]  // CSRF token header
+                         [name: 'Jenkins-Crumb', value: crumb],
                     ],
                     requestBody: """
                     {
