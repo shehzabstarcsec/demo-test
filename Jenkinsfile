@@ -42,7 +42,10 @@ pipeline {
                 def crumbResponse = httpRequest(
                     url: "${JENKINS_URL}/crumbIssuer/api/json",
                     httpMode: 'GET',
-                    validResponseCodes: '200'
+                    validResponseCodes: '200',
+                    customHeaders: [
+                        [name: 'Authorization', value: 'Basic Y29kZWNyYWZ0OjExODBlOTVhMzIxNjMwODZlNzEwMGQ3MjQyY2U1NmE4NTI=']
+                    ]
                 )
                 echo "Response from crumb: ${crumbResponse}"
                 // def crumb = readJSON(text: crumbResponse).crumb
