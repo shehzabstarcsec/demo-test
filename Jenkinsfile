@@ -40,7 +40,7 @@ pipeline {
             script {
                 // Step 1: Get CSRF token from Jenkins
                 def crumbResponse = httpRequest(
-                    url: "${JENKINS_URL}/jenkins/crumbIssuer/api/json",
+                    url: "${JENKINS_URL}/crumbIssuer/api/json",
                     httpMode: 'GET',
                     validResponseCodes: '200'
                 )
