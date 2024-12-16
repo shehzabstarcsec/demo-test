@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // Define the webhook URL as an environment variable
-        WEBHOOK_URL = 'http://localhost:8080/jenkins/v1/webhook'
-        JENKINS_URL = 'http://localhost:8090'  // Jenkins URL for CSRF token
+        WEBHOOK_URL = 'http://host.docker.internal:8080/jenkins/v1/webhook'
+        JENKINS_URL = 'http://host.docker.internal:8090'  // Jenkins URL for CSRF token
     }
 
     stages {
