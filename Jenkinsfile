@@ -58,12 +58,12 @@ pipeline {
                          [name: 'Jenkins-Crumb', value: crumb],
                     ],
                     requestBody: """
-                    {
-                        "status": "${status}", 
-                        "message": "Build ${status}", 
-                        "build_url": "${BUILD_URL}", 
-                        "commit": "${GIT_COMMIT}"
-                    }
+                        {
+                            "status": "asds",
+                            "message": "dasfdsafd",
+                            "build_url": "fedwfewf",
+                            "commit": "qwewewqe"
+                        }
                     """
                 )
                 echo "Response from webhook: ${response}"
