@@ -54,9 +54,9 @@ pipeline {
                     url: "${WEBHOOK_URL}",
                     httpMode: 'POST',
                     contentType: 'APPLICATION_JSON',
-                    customHeaders: [
-                        [name: 'Jenkins-Crumb', value: crumb]  // CSRF token header
-                    ],
+                    // customHeaders: [
+                    //     [name: 'Jenkins-Crumb', value: crumb]  // CSRF token header
+                    // ],
                     requestBody: """
                     {
                         "status": "${status}", 
