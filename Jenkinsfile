@@ -72,9 +72,9 @@ pipeline {
                         "message": "Build ${status}", 
                         "build_url": "${BUILD_URL}", 
                         "commit": "${GIT_COMMIT}",
-                        "event": "${EVENT_TYPE}",
+                        "event": "${GITHUB_EVENT_NAME}",
                         "title": "${JOB_NAME} #${BUILD_NUMBER}",
-                        "repositoryName": "${GIT_URL}"
+                        "repositoryName": "${GITHUB_REPOSITORY}"
                     }
                     """
                 )
