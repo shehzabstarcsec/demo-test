@@ -71,7 +71,10 @@ pipeline {
                         "status": "${status}", 
                         "message": "Build ${status}", 
                         "build_url": "${BUILD_URL}", 
-                        "commit": "${GIT_COMMIT}"
+                        "commit": "${GIT_COMMIT}",
+                        "event":"${event_type}",
+                        "title":"${title}",
+                        "repositoryName":"${repository_name}"
                     }
                     """
                 )
