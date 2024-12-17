@@ -71,9 +71,7 @@ pipeline {
                         "status": "${status}", 
                         "message": "Build ${status}", 
                         "build_url": "${BUILD_URL}", 
-                        "commit": "${GIT_COMMIT}",
-                        "title": "${JOB_NAME} #${BUILD_NUMBER}",
-                        "repositoryName": "${GITHUB_REPOSITORY}"
+                        "commit": "${GIT_COMMIT}"
                     }
                     """
                 )
