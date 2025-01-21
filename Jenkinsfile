@@ -53,7 +53,7 @@ pipeline {
                 // def jsonSlurper = new groovy.json.JsonSlurper()
                 // def crumbJson = jsonSlurper.parseText(responseBody)  // Parse the JSON response
                 // def crumb = crumbJson.crumb  // Extract CSRF token (crumb)
-                 def crumb="d187c8b5e99a2e6c515f88e7f8e3eb39c902631c85904522fb57843b3e5bbf9a"
+                 def crumb="b8484a3a5006812acdb21c1b0761ee3e10850cedf310fd6bd20c2e3e0b82f546"
                 echo "CSRF Token retrieved: ${crumb}"
 
                 def repoUrl = env.GIT_URL ?: 'Unknown'
