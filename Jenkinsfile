@@ -39,14 +39,14 @@ pipeline {
         always {
             script {
                 // Step 1: Get CSRF token from Jenkins
-                def crumbResponse = httpRequest(
-                    url: "${JENKINS_URL}/crumbIssuer/api/json",
-                    httpMode: 'GET',
-                    validResponseCodes: '200',
-                    customHeaders: [
-                        [name: 'Authorization', value: 'Basic YWRtaW46MTE1ZWY4NjYwZTRmODBmMmQ2NTY1MTAwYWYxZjMwNDdhNA==']
-                    ]
-                )
+                // def crumbResponse = httpRequest(
+                //     url: "${JENKINS_URL}/crumbIssuer/api/json",
+                //     httpMode: 'GET',
+                //     validResponseCodes: '200',
+                //     customHeaders: [
+                //         [name: 'Authorization', value: 'Basic YWRtaW46MTE1ZWY4NjYwZTRmODBmMmQ2NTY1MTAwYWYxZjMwNDdhNA==']
+                //     ]
+                // )
                 // def crumbJson = readJSON(text: crumbResponse)
                 // def crumb = crumbJson.crumb  // Extract CSRF token (crumb)
                 // def responseBody = crumbResponse.getContent() // Extract content from the response
