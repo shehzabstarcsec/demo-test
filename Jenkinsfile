@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define the webhook URL as an environment variable
         WEBHOOK_URL = 'https://millennium-champion-positions-nylon.trycloudflare.com/jenkins/v1/webhook'
-        JENKINS_URL = 'http://host.docker.internal:8090'  // Jenkins URL for CSRF token
+        JENKINS_URL = ' https://heights-pakistan-li-penalties.trycloudflare.com'  // Jenkins URL for CSRF token
     }
 
     stages {
@@ -104,7 +104,7 @@ pipeline {
                     contentType: 'APPLICATION_JSON',
                     customHeaders: [
                          [name: 'Jenkins-Crumb', value: crumb],
-                         [name: 'Origin', value: 'http://localhost:8090']
+                         [name: 'Origin', value: ' https://heights-pakistan-li-penalties.trycloudflare.com']
                     ],
                     requestBody:requestBody
                 )
