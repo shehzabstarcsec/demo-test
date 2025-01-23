@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // Define the webhook URL as an environment variable
-        WEBHOOK_URL = 'https://stuff-teacher-sun-unified.trycloudflare.com/jenkins/v1/webhook'
-        JENKINS_URL = ' https://heights-pakistan-li-penalties.trycloudflare.com'  // Jenkins URL for CSRF token
+        WEBHOOK_URL = 'https://officer-were-socks-medicaid.trycloudflare.com/jenkins/v1/webhook'
+        JENKINS_URL = 'http://13.232.153.140:8080'  // Jenkins URL for CSRF token
     }
 
     stages {
@@ -44,7 +44,7 @@ pipeline {
                 //     httpMode: 'GET',
                 //     validResponseCodes: '200',
                 //     customHeaders: [
-                //         [name: 'Authorization', value: 'Basic YWRtaW46MTE1ZWY4NjYwZTRmODBmMmQ2NTY1MTAwYWYxZjMwNDdhNA==']
+                //         [name: 'Authorization', value: 'Basic Y29kZWNyYWZ0OjExODBlOTVhMzIxNjMwODZlNzEwMGQ3MjQyY2U1NmE4NTI=']
                 //     ]
                 // )
                 // def crumbJson = readJSON(text: crumbResponse)
@@ -53,7 +53,7 @@ pipeline {
                 // def jsonSlurper = new groovy.json.JsonSlurper()
                 // def crumbJson = jsonSlurper.parseText(responseBody)  // Parse the JSON response
                 // def crumb = crumbJson.crumb  // Extract CSRF token (crumb)
-                 def crumb="b8484a3a5006812acdb21c1b0761ee3e10850cedf310fd6bd20c2e3e0b82f546"
+                def crumb="ee16d3d3684cd8523a17553511e2410e83828dca12e006ad4ff2efe840b0ca7c"
                 echo "CSRF Token retrieved: ${crumb}"
 
                 def repoUrl = env.GIT_URL ?: 'Unknown'
@@ -76,26 +76,41 @@ pipeline {
                     actionType = "Branch Commit"
                     sourceBranch = env.BRANCH_NAME 
                     targetBranch = "" 
+                } else if (env.GIT_BRANCH) {
+                    actionType = "Branch Commit"
+                    sourceBranch = env.GIT_BRANCH
+                    targetBranch = ""
+                } else {
+                    actionType = "Build"
+                    sourceBranch = "Unknown"
+                    targetBranch = "Unknown"
                 }
 
                 def requestBody = """
-                                    {
-                                    "status": "${currentBuild.result ?: 'SUCCESS'}",
-                                    "message": "Build ${currentBuild.result ?: 'SUCCESS'}",
-                                    "build_url": "${env.BUILD_URL}",
-                                    "repo_url": "${repoUrl}",
-                                    "branch": "${branch}",
-                                    "commit": "${commit}",
-                                    "pr_url": "${pullRequest}",
-                                    "pr_author": "${prAuthor}",
-                                    "job_name": "${env.JOB_NAME}",
-                                    "build_number": "${env.BUILD_NUMBER}",
-                                    "action_type": "${actionType}",
-                                    "source_branch": "${sourceBranch}",
-                                    "target_branch": "${targetBranch}"
-                                    }
-                """
-                                                    
+                {
+                "status": "${currentBuild.result ?: 'SUCCESS'}",
+                "message": "Build ${currentBuild.result ?: 'SUCCESS'}",
+                "build_url": "${env.BUILD_URL}",
+                "repo_url": "${repoUrl}",
+                "branch": "${branch}",
+                "commit": "${commit}",
+                "pr_url": "${pullRequest}",
+                "pr_author": "${prAuthor}",
+                "job_name": "${env.JOB_NAME}",
+                "build_number": "${env.BUILD_NUMBER}",
+                "action_type": "${actionType}",
+                "source_branch": "${sourceBranch}",
+                "target_branch": "${targetBranch}",
+                "jenkins_url": "${JENKINS_URL}",
+                "trigger_name": "${env.TRIGGER_NAME ?: 'N/A'}",
+                "branch_name": "${env.BRANCH_NAME ?: 'N/A'}",
+                "change_id": "${env.CHANGE_ID ?: 'N/A'}",
+                "change_url": "${env.CHANGE_URL ?: 'N/A'}",
+                "change_branch: "${env.CHANGE_BRANCH ?: 'N/A'}",
+                "change_target": "${env.CHANGE_TARGET ?: 'N/A'}"
+            }
+            """
+
                 // Step 2: Trigger the webhook with CSRF token
                 def status = currentBuild.result ?: 'SUCCESS'
                 def response = httpRequest(
@@ -104,7 +119,7 @@ pipeline {
                     contentType: 'APPLICATION_JSON',
                     customHeaders: [
                          [name: 'Jenkins-Crumb', value: crumb],
-                         [name: 'Origin', value: ' https://heights-pakistan-li-penalties.trycloudflare.com']
+                         [name: 'Origin', value: 'http://13.232.153.140:8080']
                     ],
                     requestBody:requestBody
                 )
@@ -115,5 +130,3 @@ pipeline {
         // Additional post conditions...
     }
 }
-
-
