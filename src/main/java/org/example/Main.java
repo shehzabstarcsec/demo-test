@@ -13,9 +13,6 @@ public class Main {
             // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
             System.out.println("i = " + i);
             //do smthg spcl test
-            //test1
-            //test2
-            //test222
         }
     }
 }
