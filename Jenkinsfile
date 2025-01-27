@@ -106,7 +106,7 @@ pipeline {
                 "branch_name": "${env.BRANCH_NAME ?: 'N/A'}",
                 "change_id": "${env.CHANGE_ID ?: 'N/A'}",
                 "change_url": "${env.CHANGE_URL ?: 'N/A'}",
-                "change_branch: "${env.CHANGE_BRANCH ?: 'N/A'}",
+                "change_branch": "${env.CHANGE_BRANCH ?: 'N/A'}",
                 "change_target": "${env.CHANGE_TARGET ?: 'N/A'}"
             }
             """
