@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define the webhook URL as an environment variable
-        WEBHOOK_URL = 'https://speeds-massage-settled-oriented.trycloudflare.com/devSecOps/v1/webhook'
+        WEBHOOK_URL = 'https://villa-orchestra-nominations-windsor.trycloudflare.com/devSecOps/v1/webhook'
         JENKINS_URL = 'http://13.232.153.140:8080'  // Jenkins URL for CSRF token
     }
 
