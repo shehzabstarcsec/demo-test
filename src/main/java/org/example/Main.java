@@ -8,6 +8,15 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.printf("Hello and welcome!");
 
+         // Hardcoded credentials (Security issue)
+        String username = "admin";
+        String password = "password123";  // Hardcoded password
+
+        // Vulnerable SQL query (SQL Injection)
+        String userInput = "'; DROP TABLE users; --";
+        String query = "SELECT * FROM users WHERE username = '" + userInput + "'"; // SQL Injection risk
+        
+
         for (int i = 1; i <= 5; i++) {
             //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
             // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
