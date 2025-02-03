@@ -59,6 +59,7 @@ public class Main {
             Object obj = ois.readObject(); // 🚨 Unsafe deserialization
             ois.close();
             System.out.println("Deserialized: " + obj);
+            //test
         } catch (Exception e) {
             e.printStackTrace();
         }
