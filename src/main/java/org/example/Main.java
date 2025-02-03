@@ -49,6 +49,7 @@ public class Main {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            //test ex
         }
 
         // 🚨 Insecure deserialization (RCE vulnerability)
