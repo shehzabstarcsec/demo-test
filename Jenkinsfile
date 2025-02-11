@@ -5,6 +5,7 @@ pipeline {
         // Define the webhook URL as an environment variable
         WEBHOOK_URL = 'https://cleaning-zinc-hardly-exhibition.trycloudflare.com//pipeline/v1/jenkins/webhook'
         JENKINS_URL = 'http://13.232.153.140:8080'  // Jenkins URL for CSRF token
+        JENKINS_ACCESS_TOKEN="Y29kZWNyYWZ0OjExODBlOTVhMzIxNjMwODZlNzEwMGQ3MjQyY2U1NmE4NTI="
     }
 
     stages {
@@ -39,21 +40,21 @@ pipeline {
         always {
             script {
                 // Step 1: Get CSRF token from Jenkins
-                // def crumbResponse = httpRequest(
-                //     url: "${JENKINS_URL}/crumbIssuer/api/json",
-                //     httpMode: 'GET',
-                //     validResponseCodes: '200',
-                //     customHeaders: [
-                //         [name: 'Authorization', value: 'Basic Y29kZWNyYWZ0OjExODBlOTVhMzIxNjMwODZlNzEwMGQ3MjQyY2U1NmE4NTI=']
-                //     ]
-                // )
-                // def crumbJson = readJSON(text: crumbResponse)
-                // def crumb = crumbJson.crumb  // Extract CSRF token (crumb)
-                // def responseBody = crumbResponse.getContent() // Extract content from the response
-                // def jsonSlurper = new groovy.json.JsonSlurper()
-                // def crumbJson = jsonSlurper.parseText(responseBody)  // Parse the JSON response
-                // def crumb = crumbJson.crumb  // Extract CSRF token (crumb)
-                def crumb="ee16d3d3684cd8523a17553511e2410e83828dca12e006ad4ff2efe840b0ca7c"
+                def crumbResponse = httpRequest(
+                    url: "${JENKINS_URL}/crumbIssuer/api/json",
+                    httpMode: 'GET',
+                    validResponseCodes: '200',
+                    customHeaders: [
+                        [name: 'Authorization', value: 'Basic '+JENKINS_ACCESS_TOKEN]
+                    ]
+                )
+                def crumbJson = readJSON(text: crumbResponse)
+                def crumb = crumbJson.crumb  // Extract CSRF token (crumb)
+                def responseBody = crumbResponse.getContent() // Extract content from the response
+                def jsonSlurper = new groovy.json.JsonSlurper()
+                def crumbJson = jsonSlurper.parseText(responseBody)  // Parse the JSON response
+                def crumb = crumbJson.crumb  // Extract CSRF token (crumb)
+                // def crumb="ee16d3d3684cd8523a17553511e2410e83828dca12e006ad4ff2efe840b0ca7c"
                 echo "CSRF Token retrieved: ${crumb}"
 
                 def repoUrl = env.GIT_URL ?: 'Unknown'
