@@ -5,8 +5,9 @@ pipeline {
         // Define the webhook URL as an environment variable
         WEBHOOK_URL = 'https://cleaning-zinc-hardly-exhibition.trycloudflare.com/pipeline/v1/jenkins/webhook'
         JENKINS_URL = 'http://13.232.153.140:8080'  // Jenkins URL for CSRF token
-        JENKINS_ACCESS_TOKEN="117972fde715685993cdd5f6d5d8a04fa2"
+        JENKINS_API_TOKEN="117972fde715685993cdd5f6d5d8a04fa2"
         JENKINS_USERNAME="admin"
+        JENKINS_ACCESS_TOKEN="YWRtaW46MTE3OTcyZmRlNzE1Njg1OTkzY2RkNWY2ZDVkOGEwNGZhMg=="
     }
 
     stages {
@@ -49,13 +50,13 @@ pipeline {
                 //         [name: 'Authorization', value: 'Basic '+JENKINS_ACCESS_TOKEN]
                 //     ]
                 // )
-               def credentials = "${JENKINS_USERNAME}:${JENKINS_ACCESS_TOKEN}".bytes.encodeBase64().toString()
+               // def credentials = "${JENKINS_USERNAME}:${JENKINS_ACCESS_TOKEN}".bytes.encodeBase64().toString()
                def crumbResponse = httpRequest(
                    url: "${JENKINS_URL}/crumbIssuer/api/json",
                    httpMode: 'GET',
                    validResponseCodes: '200',
                    customHeaders: [
-                       [name: 'Authorization', value: "Basic ${credentials}"]
+                       [name: 'Authorization', value: "Basic ${JENKINS_ACCESS_TOKEN}"]
                    ]
                )
 
