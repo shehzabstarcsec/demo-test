@@ -2,12 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Define the webhook URL as an environment variable
         WEBHOOK_URL = 'https://cleaning-zinc-hardly-exhibition.trycloudflare.com/pipeline/v1/jenkins/webhook'
-        JENKINS_URL = 'http://13.232.153.140:8080'  // Jenkins URL for CSRF token
-        JENKINS_API_TOKEN="117972fde715685993cdd5f6d5d8a04fa2"
-        JENKINS_USERNAME="admin"
-        JENKINS_ACCESS_TOKEN="YWRtaW46MTE3OTcyZmRlNzE1Njg1OTkzY2RkNWY2ZDVkOGEwNGZhMg=="
+        JENKINS_URL = 'http://13.232.153.140:8080'
+        JENKINS_ACCESS_TOKEN = "YWRtaW46MTE3OTcyZmRlNzE1Njg1OTkzY2RkNWY2ZDVkOGEwNGZhMg=="
     }
 
     stages {
@@ -38,19 +35,8 @@ pipeline {
     }
 
     post {
-        // Trigger CSRF token before any post actions
         always {
             script {
-                // Step 1: Get CSRF token from Jenkins
-                // def crumbResponse = httpRequest(
-                //     url: "${JENKINS_URL}/crumbIssuer/api/json",
-                //     httpMode: 'GET',
-                //     validResponseCodes: '200',
-                //     customHeaders: [
-                //         [name: 'Authorization', value: 'Basic '+JENKINS_ACCESS_TOKEN]
-                //     ]
-                // )
-               // def credentials = "${JENKINS_USERNAME}:${JENKINS_ACCESS_TOKEN}".bytes.encodeBase64().toString()
                def crumbResponse = httpRequest(
                    url: "${JENKINS_URL}/crumbIssuer/api/json",
                    httpMode: 'GET',
@@ -59,14 +45,10 @@ pipeline {
                        [name: 'Authorization', value: "Basic ${JENKINS_ACCESS_TOKEN}"]
                    ]
                )
-
-                // def crumbJsonRes = readJSON(text: crumbResponse)
-                // def crumb = crumbJsonRes.crumb  // Extract CSRF token (crumb)
                 def responseBody = crumbResponse.getContent() // Extract content from the response
                 def jsonSlurper = new groovy.json.JsonSlurper()
                 def crumbJson = jsonSlurper.parseText(responseBody)  // Parse the JSON response
                 def crumb = crumbJson.crumb  // Extract CSRF token (crumb)
-                // def crumb="ee16d3d3684cd8523a17553511e2410e83828dca12e006ad4ff2efe840b0ca7c"
                 echo "CSRF Token retrieved: ${crumb}"
 
                 def repoUrl = env.GIT_URL ?: 'Unknown'
@@ -80,7 +62,6 @@ pipeline {
                 def sourceBranch = ""
                 def targetBranch = ""
 
-                // Determine the type of build and capture relevant information
                 if (env.CHANGE_ID) {
                     actionType = "Pull Request"
                     sourceBranch = env.CHANGE_BRANCH ?: "Unknown" // Source branch of the PR
@@ -124,7 +105,6 @@ pipeline {
             }
             """
 
-                // Step 2: Trigger the webhook with CSRF token
                 def status = currentBuild.result ?: 'SUCCESS'
                 def response = httpRequest(
                     url: "${WEBHOOK_URL}",
@@ -139,7 +119,5 @@ pipeline {
                 echo "Response from webhook: ${response}"
             }
         }
-
-        // Additional post conditions...
     }
 }
