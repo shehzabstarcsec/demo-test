@@ -3,9 +3,10 @@ pipeline {
 
     environment {
         // Define the webhook URL as an environment variable
-        WEBHOOK_URL = 'https://cleaning-zinc-hardly-exhibition.trycloudflare.com//pipeline/v1/jenkins/webhook'
+        WEBHOOK_URL = 'https://cleaning-zinc-hardly-exhibition.trycloudflare.com/pipeline/v1/jenkins/webhook'
         JENKINS_URL = 'http://13.232.153.140:8080'  // Jenkins URL for CSRF token
-        JENKINS_ACCESS_TOKEN="Y29kZWNyYWZ0OjExODBlOTVhMzIxNjMwODZlNzEwMGQ3MjQyY2U1NmE4NTI="
+        JENKINS_ACCESS_TOKEN="117972fde715685993cdd5f6d5d8a04fa2"
+        JENKINS_USERNAME="admin"
     }
 
     stages {
@@ -40,14 +41,24 @@ pipeline {
         always {
             script {
                 // Step 1: Get CSRF token from Jenkins
-                def crumbResponse = httpRequest(
-                    url: "${JENKINS_URL}/crumbIssuer/api/json",
-                    httpMode: 'GET',
-                    validResponseCodes: '200',
-                    customHeaders: [
-                        [name: 'Authorization', value: 'Basic '+JENKINS_ACCESS_TOKEN]
-                    ]
-                )
+                // def crumbResponse = httpRequest(
+                //     url: "${JENKINS_URL}/crumbIssuer/api/json",
+                //     httpMode: 'GET',
+                //     validResponseCodes: '200',
+                //     customHeaders: [
+                //         [name: 'Authorization', value: 'Basic '+JENKINS_ACCESS_TOKEN]
+                //     ]
+                // )
+               def credentials = "${JENKINS_USERNAME}:${JENKINS_ACCESS_TOKEN}".bytes.encodeBase64().toString()
+               def crumbResponse = httpRequest(
+                   url: "${JENKINS_URL}/crumbIssuer/api/json",
+                   httpMode: 'GET',
+                   validResponseCodes: '200',
+                   customHeaders: [
+                       [name: 'Authorization', value: "Basic ${credentials}"]
+                   ]
+               )
+
                 // def crumbJsonRes = readJSON(text: crumbResponse)
                 // def crumb = crumbJsonRes.crumb  // Extract CSRF token (crumb)
                 def responseBody = crumbResponse.getContent() // Extract content from the response
